@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import Earn from "./pages/Earn";
+import Refer from "./pages/Refer";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/earn" element={<Earn />} />
+          <Route path="/refer" element={<Refer />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
