@@ -4,10 +4,12 @@ import { HowItWorks } from "@/components/HowItWorks";
 import { ArrowRight, Star, CheckCircle, Shield, TrendingUp } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Footer } from "@/components/Footer";
+import { Navigation } from "@/components/Navigation";
 
 const Index = () => {
   return (
     <div className="min-h-screen flex flex-col">
+      <Navigation />
       <main className="flex-grow">
         {/* Hero Section */}
       <section className="bg-gradient-to-b from-primary to-primary/90 text-white py-20">
@@ -167,7 +169,6 @@ const Index = () => {
         </div>
       </section>
       </main>
-      
       <Footer />
     </div>
   );

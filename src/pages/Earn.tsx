@@ -1,6 +1,7 @@
 import { TaskCard } from "@/components/TaskCard";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
+import { Navigation } from "@/components/Navigation";
 import { 
   ArrowRight, 
   DollarSign, 
@@ -14,7 +15,7 @@ import {
 const Earn = () => {
   return (
     <div className="min-h-screen bg-background">
-      {/* Header Section */}
+      <Navigation />
       <section className="bg-primary text-white py-12">
         <div className="container mx-auto px-4">
           <h1 className="text-3xl md:text-4xl font-bold mb-4">
