@@ -1,7 +1,15 @@
 import { TaskCard } from "@/components/TaskCard";
 import { Progress } from "@/components/ui/progress";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, DollarSign, Trophy, ChartBarIncreasing } from "lucide-react";
+import { 
+  ArrowRight, 
+  DollarSign, 
+  Trophy, 
+  ChartBarIncreasing,
+  ListTodo,
+  Coins,
+  ClipboardList
+} from "lucide-react";
 
 const Earn = () => {
   return (
@@ -18,8 +26,72 @@ const Earn = () => {
         </div>
       </section>
 
-      {/* Progress Section */}
+      {/* Dashboard Overview */}
       <section className="container mx-auto px-4 py-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="bg-card p-6 rounded-lg shadow-lg flex items-start">
+            <DollarSign className="h-10 w-10 text-primary mr-4" />
+            <div>
+              <h3 className="text-lg font-semibold text-muted-foreground">Total Earnings</h3>
+              <p className="text-3xl font-bold">$15.00</p>
+            </div>
+          </div>
+          <div className="bg-card p-6 rounded-lg shadow-lg flex items-start">
+            <ListTodo className="h-10 w-10 text-primary mr-4" />
+            <div>
+              <h3 className="text-lg font-semibold text-muted-foreground">Active Tasks</h3>
+              <p className="text-3xl font-bold">7</p>
+            </div>
+          </div>
+          <div className="bg-card p-6 rounded-lg shadow-lg flex items-start">
+            <Coins className="h-10 w-10 text-primary mr-4" />
+            <div>
+              <h3 className="text-lg font-semibold text-muted-foreground">Rewards Balance</h3>
+              <p className="text-3xl font-bold">50 pts</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Category Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+          <div className="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+            <div className="flex items-center mb-4">
+              <ListTodo className="h-8 w-8 text-primary mr-3" />
+              <h3 className="text-xl font-bold">Tasks</h3>
+            </div>
+            <p className="text-muted-foreground mb-4">Complete simple tasks to earn quick rewards</p>
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium">5 available</span>
+              <Button variant="outline" size="sm">View Tasks</Button>
+            </div>
+          </div>
+          
+          <div className="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+            <div className="flex items-center mb-4">
+              <Coins className="h-8 w-8 text-primary mr-3" />
+              <h3 className="text-xl font-bold">Staking</h3>
+            </div>
+            <p className="text-muted-foreground mb-4">Stake your earnings to earn passive income</p>
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium">10% APY</span>
+              <Button variant="outline" size="sm">Start Staking</Button>
+            </div>
+          </div>
+          
+          <div className="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
+            <div className="flex items-center mb-4">
+              <ClipboardList className="h-8 w-8 text-primary mr-3" />
+              <h3 className="text-xl font-bold">Surveys</h3>
+            </div>
+            <p className="text-muted-foreground mb-4">Share your opinion and get rewarded</p>
+            <div className="flex justify-between items-center">
+              <span className="text-sm font-medium">3 available</span>
+              <Button variant="outline" size="sm">Take Survey</Button>
+            </div>
+          </div>
+        </div>
+
+        {/* Progress Section */}
         <div className="bg-card rounded-lg p-6 shadow-lg mb-8">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-semibold">Your Progress</h2>
