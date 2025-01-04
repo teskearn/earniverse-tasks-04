@@ -3,11 +3,13 @@ import { TaskCard } from "@/components/TaskCard";
 import { HowItWorks } from "@/components/HowItWorks";
 import { ArrowRight, Star, CheckCircle, Shield, TrendingUp } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Footer } from "@/components/Footer";
 
 const Index = () => {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
+    <div className="min-h-screen flex flex-col">
+      <main className="flex-grow">
+        {/* Hero Section */}
       <section className="bg-gradient-to-b from-primary to-primary/90 text-white py-20">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
@@ -29,7 +31,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Key Features Section */}
+        {/* Key Features Section */}
       <section className="py-16 bg-white">
         <div className="container">
           <h2 className="text-3xl font-bold text-center mb-12">Why Choose Our Platform?</h2>
@@ -58,10 +60,10 @@ const Index = () => {
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <HowItWorks />
+        {/* How It Works Section */}
+        <HowItWorks />
 
-      {/* Tasks Preview Section */}
+        {/* Tasks Preview Section */}
       <section className="py-16 container">
         <h2 className="text-3xl font-bold text-center mb-12">Available Tasks</h2>
         
@@ -119,7 +121,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Testimonials Section */}
+        {/* Testimonials Section */}
       <section className="bg-muted py-16">
         <div className="container">
           <h2 className="text-3xl font-bold text-center mb-8">
@@ -142,7 +144,7 @@ const Index = () => {
         </div>
       </section>
 
-      {/* FAQ Section */}
+        {/* FAQ Section */}
       <section className="bg-white py-16">
         <div className="container">
           <h2 className="text-3xl font-bold text-center mb-8">
@@ -164,6 +166,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+      </main>
+      
+      <Footer />
     </div>
   );
 };
