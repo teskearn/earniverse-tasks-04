@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatsSection } from "@/components/StatsSection";
 import { TasksSection } from "@/components/TasksSection";
 import { getRandomTasks } from "@/utils/taskData";
+import { ListTodo } from "lucide-react";
 
 const Earn = () => {
   return (
