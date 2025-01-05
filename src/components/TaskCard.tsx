@@ -1,15 +1,24 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { DollarSign, Clock, Star, Lock } from "lucide-react";
-import { Tooltip } from "@/components/ui/tooltip";
+import { DollarSign, Clock, Star, Lock, AlertCircle } from "lucide-react";
+import { 
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface TaskCardProps {
   title: string;
   reward: string;
   timeEstimate: string;
   isPremium?: boolean;
+  isLocked?: boolean;
   difficulty?: "easy" | "medium" | "hard";
+  description?: string;
+  limit?: string;
+  category: "free" | "premium" | "milestone";
 }
 
 export const TaskCard = ({ 
@@ -17,26 +26,43 @@ export const TaskCard = ({
   reward, 
   timeEstimate, 
   isPremium = false,
-  difficulty = "easy" 
+  isLocked = false,
+  difficulty = "easy",
+  description,
+  limit,
+  category
 }: TaskCardProps) => {
   return (
     <Card className="w-full transition-all hover:shadow-lg">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
         <CardTitle className="text-lg font-bold">{title}</CardTitle>
         <div className="flex items-center gap-2">
-          {difficulty === "hard" && (
-            <Badge variant="outline" className="text-yellow-600">
-              Advanced
+          {category === "milestone" && (
+            <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+              Milestone
             </Badge>
           )}
-          {isPremium && (
+          {category === "premium" && (
             <Badge className="bg-secondary text-secondary-foreground">
               <Star className="mr-1 h-3 w-3" /> Premium
             </Badge>
           )}
+          {isLocked && (
+            <Tooltip>
+              <TooltipTrigger>
+                <Badge variant="outline" className="text-yellow-600">
+                  <Lock className="mr-1 h-3 w-3" /> Locked
+                </Badge>
+              </TooltipTrigger>
+              <TooltipContent>
+                Complete 50 free tasks to unlock
+              </TooltipContent>
+            </Tooltip>
+          )}
         </div>
       </CardHeader>
       <CardContent>
+        <p className="text-sm text-muted-foreground mb-4">{description}</p>
         <div className="flex items-center space-x-4 text-sm text-muted-foreground">
           <div className="flex items-center">
             <DollarSign className="mr-1 h-4 w-4" />
@@ -46,15 +72,27 @@ export const TaskCard = ({
             <Clock className="mr-1 h-4 w-4" />
             {timeEstimate}
           </div>
+          {limit && (
+            <div className="flex items-center">
+              <AlertCircle className="mr-1 h-4 w-4" />
+              {limit}
+            </div>
+          )}
         </div>
         <Button 
           className="mt-4 w-full" 
           variant={isPremium ? "secondary" : "default"}
+          disabled={isLocked}
         >
-          {isPremium ? (
+          {isLocked ? (
             <>
               <Lock className="mr-2 h-4 w-4" />
-              Unlock Task
+              Locked
+            </>
+          ) : isPremium ? (
+            <>
+              <Star className="mr-2 h-4 w-4" />
+              Start Premium Task
             </>
           ) : (
             "Start Task"

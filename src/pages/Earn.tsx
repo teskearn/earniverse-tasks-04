@@ -11,6 +11,7 @@ import {
   Coins,
   ClipboardList
 } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Earn = () => {
   return (
@@ -27,8 +28,8 @@ const Earn = () => {
         </div>
       </section>
 
-      {/* Dashboard Overview */}
       <section className="container mx-auto px-4 py-8">
+        {/* Dashboard Overview */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="bg-card p-6 rounded-lg shadow-lg flex items-start">
             <DollarSign className="h-10 w-10 text-primary mr-4" />
@@ -40,147 +41,168 @@ const Earn = () => {
           <div className="bg-card p-6 rounded-lg shadow-lg flex items-start">
             <ListTodo className="h-10 w-10 text-primary mr-4" />
             <div>
-              <h3 className="text-lg font-semibold text-muted-foreground">Active Tasks</h3>
-              <p className="text-3xl font-bold">7</p>
+              <h3 className="text-lg font-semibold text-muted-foreground">Tasks Completed</h3>
+              <p className="text-3xl font-bold">23/50</p>
+              <p className="text-sm text-muted-foreground">to unlock premium</p>
             </div>
           </div>
           <div className="bg-card p-6 rounded-lg shadow-lg flex items-start">
-            <Coins className="h-10 w-10 text-primary mr-4" />
+            <Trophy className="h-10 w-10 text-primary mr-4" />
             <div>
-              <h3 className="text-lg font-semibold text-muted-foreground">Rewards Balance</h3>
-              <p className="text-3xl font-bold">50 pts</p>
+              <h3 className="text-lg font-semibold text-muted-foreground">Current Streak</h3>
+              <p className="text-3xl font-bold">4 days</p>
             </div>
           </div>
         </div>
 
-        {/* Category Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <div className="flex items-center mb-4">
-              <ListTodo className="h-8 w-8 text-primary mr-3" />
-              <h3 className="text-xl font-bold">Tasks</h3>
-            </div>
-            <p className="text-muted-foreground mb-4">Complete simple tasks to earn quick rewards</p>
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">5 available</span>
-              <Button variant="outline" size="sm">View Tasks</Button>
-            </div>
-          </div>
+        {/* Tasks Section */}
+        <Tabs defaultValue="free" className="mb-8">
+          <TabsList className="grid w-full grid-cols-3 mb-8">
+            <TabsTrigger value="free">Free Tasks</TabsTrigger>
+            <TabsTrigger value="premium">Premium Tasks</TabsTrigger>
+            <TabsTrigger value="milestone">Milestones</TabsTrigger>
+          </TabsList>
           
-          <div className="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <div className="flex items-center mb-4">
-              <Coins className="h-8 w-8 text-primary mr-3" />
-              <h3 className="text-xl font-bold">Staking</h3>
+          <TabsContent value="free">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <TaskCard
+                title="Watch Videos"
+                description="Watch short videos to earn rewards"
+                reward="$0.05"
+                timeEstimate="2-3 mins"
+                limit="10 videos/day"
+                category="free"
+              />
+              <TaskCard
+                title="Quick Surveys"
+                description="Complete short surveys"
+                reward="$0.10"
+                timeEstimate="2-3 mins"
+                category="free"
+              />
+              <TaskCard
+                title="Daily Check-in"
+                description="Log in daily to earn rewards"
+                reward="$0.01"
+                timeEstimate="1 min"
+                category="free"
+              />
+              <TaskCard
+                title="Read Articles"
+                description="Read and engage with articles"
+                reward="$0.02"
+                timeEstimate="5 mins"
+                limit="5 articles/day"
+                category="free"
+              />
+              <TaskCard
+                title="Social Media Tasks"
+                description="Follow and engage with social media"
+                reward="$0.05"
+                timeEstimate="1 min"
+                category="free"
+              />
+              <TaskCard
+                title="Refer Friends"
+                description="Earn when referred users complete tasks"
+                reward="$0.50"
+                timeEstimate="Varies"
+                category="free"
+              />
             </div>
-            <p className="text-muted-foreground mb-4">Stake your earnings to earn passive income</p>
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">10% APY</span>
-              <Button variant="outline" size="sm">Start Staking</Button>
-            </div>
-          </div>
+          </TabsContent>
           
-          <div className="bg-card p-6 rounded-lg shadow-lg hover:shadow-xl transition-shadow">
-            <div className="flex items-center mb-4">
-              <ClipboardList className="h-8 w-8 text-primary mr-3" />
-              <h3 className="text-xl font-bold">Surveys</h3>
+          <TabsContent value="premium">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <TaskCard
+                title="Product Reviews"
+                description="Write detailed product reviews"
+                reward="$2.00"
+                timeEstimate="15-20 mins"
+                category="premium"
+                isPremium
+                isLocked
+              />
+              <TaskCard
+                title="App Testing"
+                description="Test and review mobile applications"
+                reward="$1.50"
+                timeEstimate="30 mins"
+                category="premium"
+                isPremium
+                isLocked
+              />
+              <TaskCard
+                title="Affiliate Sign-ups"
+                description="Sign up for partner services"
+                reward="$3.00"
+                timeEstimate="10 mins"
+                category="premium"
+                isPremium
+                isLocked
+              />
+              <TaskCard
+                title="Advanced Surveys"
+                description="Complete detailed market research surveys"
+                reward="$2.00"
+                timeEstimate="10-15 mins"
+                category="premium"
+                isPremium
+                isLocked
+              />
+              <TaskCard
+                title="Content Creation"
+                description="Create promotional content"
+                reward="$5.00"
+                timeEstimate="1-2 hours"
+                category="premium"
+                isPremium
+                isLocked
+              />
             </div>
-            <p className="text-muted-foreground mb-4">Share your opinion and get rewarded</p>
-            <div className="flex justify-between items-center">
-              <span className="text-sm font-medium">3 available</span>
-              <Button variant="outline" size="sm">Take Survey</Button>
+          </TabsContent>
+          
+          <TabsContent value="milestone">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <TaskCard
+                title="Task Master"
+                description="Complete 100 tasks of any type"
+                reward="$1.00 bonus"
+                timeEstimate="Ongoing"
+                category="milestone"
+              />
+              <TaskCard
+                title="Super Referrer"
+                description="Refer 10 active users"
+                reward="$10.00 bonus"
+                timeEstimate="Ongoing"
+                category="milestone"
+              />
+              <TaskCard
+                title="Weekly Warrior"
+                description="Maintain a 7-day login streak"
+                reward="$1.00 bonus"
+                timeEstimate="7 days"
+                category="milestone"
+              />
             </div>
-          </div>
-        </div>
+          </TabsContent>
+        </Tabs>
 
         {/* Progress Section */}
         <div className="bg-card rounded-lg p-6 shadow-lg mb-8">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-semibold">Your Progress</h2>
+            <h2 className="text-2xl font-semibold">Premium Tasks Progress</h2>
             <div className="flex items-center text-primary">
-              <DollarSign className="h-5 w-5 mr-1" />
-              <span className="font-bold">15.00</span>
-              <span className="text-muted-foreground ml-1">/ $100.00</span>
+              <ListTodo className="h-5 w-5 mr-1" />
+              <span className="font-bold">23</span>
+              <span className="text-muted-foreground ml-1">/ 50 tasks</span>
             </div>
           </div>
-          <Progress value={15} className="h-2 mb-2" />
+          <Progress value={46} className="h-2 mb-2" />
           <p className="text-sm text-muted-foreground">
-            Complete more tasks to reach your withdrawal goal faster!
+            Complete {27} more free tasks to unlock premium tasks with higher rewards!
           </p>
-        </div>
-
-        {/* Stats Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
-          <div className="bg-card p-6 rounded-lg shadow-sm">
-            <DollarSign className="h-8 w-8 text-primary mb-2" />
-            <h3 className="font-semibold mb-1">Total Earned</h3>
-            <p className="text-2xl font-bold">$15.00</p>
-          </div>
-          <div className="bg-card p-6 rounded-lg shadow-sm">
-            <Trophy className="h-8 w-8 text-primary mb-2" />
-            <h3 className="font-semibold mb-1">Tasks Completed</h3>
-            <p className="text-2xl font-bold">24</p>
-          </div>
-          <div className="bg-card p-6 rounded-lg shadow-sm">
-            <ChartBarIncreasing className="h-8 w-8 text-primary mb-2" />
-            <h3 className="font-semibold mb-1">Current Level</h3>
-            <p className="text-2xl font-bold">Bronze</p>
-          </div>
-        </div>
-
-        {/* Available Tasks */}
-        <h2 className="text-2xl font-bold mb-6">Available Tasks</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-          <TaskCard
-            title="Quick Survey"
-            reward="$0.50"
-            timeEstimate="5 mins"
-            difficulty="easy"
-          />
-          <TaskCard
-            title="Watch Videos"
-            reward="$0.25"
-            timeEstimate="3 mins"
-            difficulty="easy"
-          />
-          <TaskCard
-            title="Market Research"
-            reward="$10"
-            timeEstimate="20 mins"
-            isPremium
-            difficulty="hard"
-          />
-          <TaskCard
-            title="App Testing"
-            reward="$0.75"
-            timeEstimate="10 mins"
-            difficulty="medium"
-          />
-          <TaskCard
-            title="Focus Group"
-            reward="$8"
-            timeEstimate="15 mins"
-            isPremium
-            difficulty="hard"
-          />
-          <TaskCard
-            title="Content Review"
-            reward="$0.25"
-            timeEstimate="3 mins"
-            difficulty="easy"
-          />
-        </div>
-
-        {/* Premium Upgrade CTA */}
-        <div className="bg-muted p-8 rounded-lg text-center">
-          <h3 className="text-2xl font-bold mb-4">
-            Want to Earn More?
-          </h3>
-          <p className="text-muted-foreground mb-6">
-            Upgrade to Premium to unlock high-paying tasks and earn up to 10x more!
-          </p>
-          <Button size="lg">
-            Upgrade Now <ArrowRight className="ml-2 h-5 w-5" />
-          </Button>
         </div>
       </section>
     </div>
