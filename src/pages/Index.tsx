@@ -87,12 +87,16 @@ const Index = () => {
             reward="$0.50"
             timeEstimate="5 mins"
             difficulty="easy"
+            category="free"
+            description="Complete a short survey"
           />
           <TaskCard
             title="Watch Videos"
             reward="$0.25"
             timeEstimate="3 mins"
             difficulty="easy"
+            category="free"
+            description="Watch and rate videos"
           />
           <TaskCard
             title="Market Research"
@@ -100,12 +104,16 @@ const Index = () => {
             timeEstimate="20 mins"
             isPremium
             difficulty="hard"
+            category="premium"
+            description="Participate in market research"
           />
           <TaskCard
             title="App Testing"
             reward="$0.75"
             timeEstimate="10 mins"
             difficulty="medium"
+            category="free"
+            description="Test new applications"
           />
           <TaskCard
             title="Focus Group"
@@ -113,12 +121,16 @@ const Index = () => {
             timeEstimate="15 mins"
             isPremium
             difficulty="hard"
+            category="premium"
+            description="Join online focus groups"
           />
           <TaskCard
             title="Content Review"
             reward="$0.25"
             timeEstimate="3 mins"
             difficulty="easy"
+            category="free"
+            description="Review website content"
           />
         </div>
       </section>
