@@ -48,6 +48,17 @@ export const Navigation = () => {
             >
               Refer
             </Link>
+            <Link
+              to="/profile"
+              className={cn(
+                "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                isActive("/profile")
+                  ? "bg-primary-foreground text-primary"
+                  : "hover:bg-primary-foreground/10"
+              )}
+            >
+              Profile
+            </Link>
           </div>
         </div>
       </div>
