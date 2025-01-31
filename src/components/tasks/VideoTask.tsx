@@ -8,6 +8,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogTrigger,
 } from "@/components/ui/dialog";
 
@@ -44,6 +45,7 @@ export const VideoTask = ({ videoLinks, reward }: VideoTaskProps) => {
 
   const handleTaskCompletion = () => {
     setTaskCompleted(true);
+    setDialogOpen(false);
     toast({
       title: "Task Completed!",
       description: `You've earned ${reward} for completing this task!`,
@@ -98,6 +100,9 @@ export const VideoTask = ({ videoLinks, reward }: VideoTaskProps) => {
       <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Watch Video to Earn Rewards</DialogTitle>
+          <DialogDescription>
+            Watch the video for 3 minutes to earn your reward. Videos will play randomly.
+          </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 p-4">
           {isWatching && !taskCompleted && (
