@@ -5,6 +5,7 @@ import { ArrowRight, Star, CheckCircle, Shield, TrendingUp, Trophy, Award } from
 import { Progress } from "@/components/ui/progress";
 import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
+import { WalletDashboard } from "@/components/WalletDashboard";
 
 const Index = () => {
   // Mock leaderboard data - in a real app this would come from your backend
@@ -71,6 +72,12 @@ const Index = () => {
 
         {/* How It Works Section */}
         <HowItWorks />
+
+        {/* Wallet Dashboard Section */}
+        <section className="py-16 container">
+          <h2 className="text-3xl font-bold text-center mb-12">Your Wallet</h2>
+          <WalletDashboard />
+        </section>
 
         {/* Tasks Preview Section */}
         <section className="py-16 container">
