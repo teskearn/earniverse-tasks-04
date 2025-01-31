@@ -12,6 +12,7 @@ export type TaskType = {
     twitter?: string[];
     telegram?: string[];
   };
+  articleLinks?: string[];
 };
 
 export const freeTasks: TaskType[] = [
@@ -43,7 +44,13 @@ export const freeTasks: TaskType[] = [
     reward: "$0.02",
     timeEstimate: "5 mins",
     limit: "5 articles/day",
-    category: "free"
+    category: "free",
+    articleLinks: [
+      "https://www.teachermagazine.com/sea_en/articles/a-student-diary-project-improving-literacy-skills-and-wellbeing",
+      "https://the-magazine.org/36/ramen-fever/index.html",
+      "https://the-magazine.org/34/new-disruptors-56-and-57/index.html",
+      "https://the-magazine.org/33/unipiper/index.html"
+    ]
   },
   {
     title: "Social Media Tasks",

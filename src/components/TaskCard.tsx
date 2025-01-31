@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { DollarSign, Clock, Star, Lock, AlertCircle, Instagram, Twitter, Send } from "lucide-react";
+import { DollarSign, Clock, Star, Lock, AlertCircle, Instagram, Twitter, Send, BookOpen } from "lucide-react";
 import { 
   Tooltip,
   TooltipContent,
@@ -32,6 +32,7 @@ interface TaskCardProps {
     twitter?: string[];
     telegram?: string[];
   };
+  articleLinks?: string[];
 }
 
 export const TaskCard = ({ 
@@ -44,13 +45,22 @@ export const TaskCard = ({
   description,
   limit,
   category,
-  socialLinks
+  socialLinks,
+  articleLinks
 }: TaskCardProps) => {
   const handleSocialClick = (platform: string, url: string) => {
     window.open(url, '_blank');
     toast({
       title: "Link opened",
       description: `Following ${platform} account will help you earn rewards!`,
+    });
+  };
+
+  const handleArticleClick = (url: string) => {
+    window.open(url, '_blank');
+    toast({
+      title: "Article opened",
+      description: "Reading and engaging with the article will help you earn rewards!",
     });
   };
 
@@ -169,6 +179,34 @@ export const TaskCard = ({
                     </div>
                   </div>
                 )}
+              </div>
+            </DialogContent>
+          </Dialog>
+        ) : articleLinks ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-full text-xs sm:text-sm" size="sm">
+                View Articles
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Available Articles</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 p-4">
+                <div className="grid grid-cols-1 gap-2">
+                  {articleLinks.map((link, index) => (
+                    <Button
+                      key={index}
+                      variant="outline"
+                      className="w-full justify-start text-xs"
+                      onClick={() => handleArticleClick(link)}
+                    >
+                      <BookOpen className="mr-2 h-4 w-4" />
+                      Read Article {index + 1}
+                    </Button>
+                  ))}
+                </div>
               </div>
             </DialogContent>
           </Dialog>
