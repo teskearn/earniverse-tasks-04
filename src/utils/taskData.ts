@@ -42,10 +42,41 @@ export const freeTasks: TaskType[] = [
   },
   {
     title: "Social Media Tasks",
-    description: "Follow and engage with social media",
+    description: "Follow and engage with our partner social media accounts to earn rewards. Complete all follows for maximum earnings!",
     reward: "$0.05",
-    timeEstimate: "1 min",
-    category: "free"
+    timeEstimate: "5-10 mins",
+    category: "free",
+    socialLinks: {
+      instagram: [
+        "https://www.instagram.com/gameplugug",
+        "https://www.instagram.com/sailyworld",
+        "https://www.instagram.com/centonomyig",
+        "https://www.instagram.com/theee_watchplug",
+        "https://www.instagram.com/middleeastresturant",
+        "https://www.instagram.com/numeroglobal",
+        "https://www.instagram.com/vibaeofficial",
+        "https://www.instagram.com/kcbbankug",
+        "https://www.instagram.com/homart_group_uganda",
+        "https://www.instagram.com/nyemba.natasha",
+        "https://www.instagram.com/goldinvestpro",
+        "https://www.instagram.com/ms_sassy19",
+        "https://www.instagram.com/pesh_love",
+        "https://www.instagram.com/jacquejaris",
+        "https://www.instagram.com/hands_of_hope__uganda",
+        "https://www.instagram.com/bloomingtrendzz",
+        "https://www.instagram.com/speke_apartments_wampewo",
+        "https://www.instagram.com/centonomyig"
+      ],
+      twitter: [
+        "https://x.com/SGabardi1111",
+        "https://x.com/DeribitExchange",
+        "https://x.com/Ian_ifb"
+      ],
+      telegram: [
+        "https://t.me/roticuganda",
+        "https://t.me/eroticuganda"
+      ]
+    }
   }
 ];
 
