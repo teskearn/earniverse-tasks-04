@@ -1,13 +1,47 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Menu, X } from "lucide-react";
+import { Menu, X, LogIn, LogOut } from "lucide-react";
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 export const Navigation = () => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const { toast } = useToast();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleSignIn = async () => {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+    });
+    
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error signing in",
+        description: error.message,
+      });
+    }
+  };
+
+  const handleSignOut = async () => {
+    const { error } = await supabase.auth.signOut();
+    
+    if (error) {
+      toast({
+        variant: "destructive",
+        title: "Error signing out",
+        description: error.message,
+      });
+    } else {
+      toast({
+        title: "Signed out successfully",
+      });
+    }
+  };
 
   return (
     <nav className="bg-primary text-white">
@@ -31,7 +65,7 @@ export const Navigation = () => {
           </button>
 
           {/* Desktop navigation */}
-          <div className="hidden md:flex space-x-4">
+          <div className="hidden md:flex items-center space-x-4">
             <Link
               to="/"
               className={cn(
@@ -76,6 +110,23 @@ export const Navigation = () => {
             >
               Profile
             </Link>
+            <Button
+              variant="outline"
+              size="sm"
+              className="ml-4"
+              onClick={handleSignIn}
+            >
+              <LogIn className="mr-2 h-4 w-4" />
+              Sign In
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleSignOut}
+            >
+              <LogOut className="mr-2 h-4 w-4" />
+              Sign Out
+            </Button>
           </div>
         </div>
 
@@ -131,6 +182,24 @@ export const Navigation = () => {
               >
                 Profile
               </Link>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={handleSignIn}
+              >
+                <LogIn className="mr-2 h-4 w-4" />
+                Sign In
+              </Button>
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full"
+                onClick={handleSignOut}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </Button>
             </div>
           </div>
         )}
