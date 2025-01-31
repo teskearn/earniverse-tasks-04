@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
-import { Wallet, ArrowUpRight, ArrowDownRight, Bitcoin, CreditCard, DollarSign } from "lucide-react";
+import { Wallet, ArrowUpRight, ArrowDownRight, Bitcoin, CreditCard, DollarSign, Phone } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -160,6 +160,14 @@ export const WalletDashboard = () => {
             >
               <DollarSign className="h-4 w-4" />
               PayPal
+            </Button>
+            <Button
+              variant="outline"
+              className="flex items-center gap-2"
+              onClick={() => handleWithdraw("Mobile Money")}
+            >
+              <Phone className="h-4 w-4" />
+              Mobile Money
             </Button>
           </div>
           <p className="text-sm text-muted-foreground mt-4">
