@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Coins, Target, Trophy, Award, Camera } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const Profile = () => {
   const { toast } = useToast();
