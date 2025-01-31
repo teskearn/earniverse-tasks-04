@@ -8,7 +8,6 @@ import { Navigation } from "@/components/Navigation";
 import { WalletDashboard } from "@/components/WalletDashboard";
 
 const Index = () => {
-  // Mock leaderboard data - in a real app this would come from your backend
   const leaderboardData = [
     { username: "Sarah J.", earnings: 250, tasks: 45 },
     { username: "Mike D.", earnings: 200, tasks: 38 },
@@ -19,7 +18,6 @@ const Index = () => {
     <div className="min-h-screen flex flex-col">
       <Navigation />
       <main className="flex-grow">
-        {/* Hero Section */}
       <section className="bg-gradient-to-b from-primary to-primary/90 text-white py-20">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
@@ -41,7 +39,6 @@ const Index = () => {
         </div>
       </section>
 
-        {/* Key Features Section */}
       <section className="py-16 bg-white">
         <div className="container">
           <h2 className="text-3xl font-bold text-center mb-12">Why Choose Our Platform?</h2>
@@ -74,12 +71,13 @@ const Index = () => {
         <HowItWorks />
 
         {/* Wallet Dashboard Section */}
-        <section className="py-16 container">
+        <section className="py-16 container bg-white shadow-lg rounded-lg my-8">
           <h2 className="text-3xl font-bold text-center mb-12">Your Wallet</h2>
-          <WalletDashboard />
+          <div className="max-w-4xl mx-auto">
+            <WalletDashboard />
+          </div>
         </section>
 
-        {/* Tasks Preview Section */}
         <section className="py-16 container">
           <h2 className="text-3xl font-bold text-center mb-12">Available Tasks</h2>
           
