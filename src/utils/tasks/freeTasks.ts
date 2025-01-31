@@ -4,7 +4,7 @@ export const freeTasks: TaskType[] = [
   {
     title: "Watch Videos",
     description: "Watch short videos to earn rewards",
-    reward: "$0.05",
+    reward: "$0.06", // Increased from $0.05
     timeEstimate: "2-3 mins",
     limit: "10 videos/day",
     category: "free",
@@ -23,21 +23,21 @@ export const freeTasks: TaskType[] = [
   {
     title: "Quick Surveys",
     description: "Complete short surveys",
-    reward: "$0.10",
+    reward: "$0.12", // Increased from $0.10
     timeEstimate: "2-3 mins",
     category: "free"
   },
   {
     title: "Daily Check-in",
     description: "Log in daily to earn rewards",
-    reward: "$0.01",
+    reward: "$0.012", // Increased from $0.01
     timeEstimate: "1 min",
     category: "free"
   },
   {
     title: "Read Articles",
     description: "Read and engage with articles",
-    reward: "$0.02",
+    reward: "$0.023", // Increased from $0.02
     timeEstimate: "5 mins",
     limit: "5 articles/day",
     category: "free",
@@ -51,7 +51,7 @@ export const freeTasks: TaskType[] = [
   {
     title: "Social Media Tasks",
     description: "Follow and engage with our partner social media accounts to earn rewards. Complete all follows for maximum earnings!",
-    reward: "$0.05",
+    reward: "$0.058", // Increased from $0.05
     timeEstimate: "5-10 mins",
     category: "free",
     socialLinks: {
