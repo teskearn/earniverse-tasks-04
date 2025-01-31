@@ -7,6 +7,11 @@ export type TaskType = {
   isPremium?: boolean;
   isLocked?: boolean;
   limit?: string;
+  socialLinks?: {
+    instagram?: string[];
+    twitter?: string[];
+    telegram?: string[];
+  };
 };
 
 export const freeTasks: TaskType[] = [
