@@ -20,21 +20,21 @@ const steps = [
 
 export const HowItWorks = () => {
   return (
-    <div className="py-16 bg-muted">
-      <div className="container">
-        <h2 className="text-3xl font-bold text-center mb-12">How It Works</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div className="py-12 sm:py-16 bg-muted">
+      <div className="container px-4">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">How It Works</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {steps.map((step, index) => (
             <div
               key={step.title}
-              className="flex flex-col items-center text-center p-6 bg-white rounded-lg shadow-sm animate-float"
+              className="flex flex-col items-center text-center p-4 sm:p-6 bg-white rounded-lg shadow-sm animate-float"
               style={{ animationDelay: `${index * 0.2}s` }}
             >
-              <div className="h-12 w-12 rounded-full bg-primary flex items-center justify-center mb-4">
-                <step.icon className="h-6 w-6 text-white" />
+              <div className="h-10 sm:h-12 w-10 sm:w-12 rounded-full bg-primary flex items-center justify-center mb-4">
+                <step.icon className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
               </div>
-              <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
-              <p className="text-muted-foreground">{step.description}</p>
+              <h3 className="text-lg sm:text-xl font-semibold mb-2">{step.title}</h3>
+              <p className="text-sm sm:text-base text-muted-foreground">{step.description}</p>
             </div>
           ))}
         </div>
