@@ -4,9 +4,35 @@ import { Progress } from "@/components/ui/progress";
 import { Navigation } from "@/components/Navigation";
 import { Footer } from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
-import { Coins, Target, Trophy, Award } from "lucide-react";
+import { Coins, Target, Trophy, Award, Camera } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
 
 const Profile = () => {
+  const { toast } = useToast();
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        toast({
+          title: "File too large",
+          description: "Please select an image under 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      const url = URL.createObjectURL(file);
+      setAvatarUrl(url);
+      toast({
+        title: "Profile picture updated",
+        description: "Your profile picture has been updated successfully",
+      });
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -14,9 +40,25 @@ const Profile = () => {
         <div className="max-w-4xl mx-auto space-y-8">
           {/* Profile Header */}
           <div className="flex items-center space-x-6">
-            <Avatar className="h-24 w-24">
-              <AvatarFallback>U</AvatarFallback>
-            </Avatar>
+            <div className="relative group">
+              <Avatar className="h-24 w-24">
+                <AvatarImage src={avatarUrl || undefined} />
+                <AvatarFallback>U</AvatarFallback>
+              </Avatar>
+              <label 
+                htmlFor="avatar-upload" 
+                className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer"
+              >
+                <Camera className="h-6 w-6 text-white" />
+              </label>
+              <input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageUpload}
+              />
+            </div>
             <div>
               <h1 className="text-3xl font-bold">Welcome</h1>
               <p className="text-muted-foreground">Not signed in</p>
