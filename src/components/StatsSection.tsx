@@ -1,13 +1,23 @@
 import { DollarSign, ListTodo, Trophy } from "lucide-react";
 
 export const StatsSection = () => {
+  // In a real app, these would come from your backend
+  const taskEarnings = 15.00;
+  const referralEarnings = 15.00;
+  const totalEarnings = taskEarnings + referralEarnings;
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
       <div className="bg-card p-6 rounded-lg shadow-lg flex items-start">
         <DollarSign className="h-10 w-10 text-primary mr-4" />
         <div>
           <h3 className="text-lg font-semibold text-muted-foreground">Total Earnings</h3>
-          <p className="text-3xl font-bold">$15.00</p>
+          <p className="text-3xl font-bold">${totalEarnings.toFixed(2)}</p>
+          <div className="text-sm text-muted-foreground">
+            <span>Tasks: ${taskEarnings.toFixed(2)}</span>
+            <span className="mx-2">•</span>
+            <span>Referrals: ${referralEarnings.toFixed(2)}</span>
+          </div>
         </div>
       </div>
       <div className="bg-card p-6 rounded-lg shadow-lg flex items-start">
