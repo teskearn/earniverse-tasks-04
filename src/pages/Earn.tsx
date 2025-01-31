@@ -3,6 +3,7 @@ import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { StatsSection } from "@/components/StatsSection";
 import { TasksSection } from "@/components/TasksSection";
+import { WalletDashboard } from "@/components/WalletDashboard";
 import { getRandomTasks } from "@/utils/taskData";
 import { ListTodo } from "lucide-react";
 
@@ -16,7 +17,7 @@ const Earn = () => {
             Start Earning Today!
           </h1>
           <p className="text-lg mb-6 text-white/90">
-            Complete tasks and earn rewards. Reach $100 to withdraw your earnings.
+            Complete tasks and earn rewards. Track your earnings and withdraw when ready.
           </p>
         </div>
       </section>
@@ -24,12 +25,17 @@ const Earn = () => {
       <section className="container mx-auto px-4 py-8">
         <StatsSection />
 
-        <Tabs defaultValue="free" className="mb-8">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+        <Tabs defaultValue="wallet" className="mb-8">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
+            <TabsTrigger value="wallet">Wallet</TabsTrigger>
             <TabsTrigger value="free">Free Tasks</TabsTrigger>
             <TabsTrigger value="premium">Premium Tasks</TabsTrigger>
             <TabsTrigger value="milestone">Milestones</TabsTrigger>
           </TabsList>
+          
+          <TabsContent value="wallet">
+            <WalletDashboard />
+          </TabsContent>
           
           <TabsContent value="free">
             <TasksSection tasks={getRandomTasks("free", 6)} />
