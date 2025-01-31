@@ -15,14 +15,13 @@ const Profile = () => {
           {/* Profile Header */}
           <div className="flex items-center space-x-6">
             <Avatar className="h-24 w-24">
-              <AvatarImage src="https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=300&h=300" alt="Profile picture" />
               <AvatarFallback>U</AvatarFallback>
             </Avatar>
             <div>
               <h1 className="text-3xl font-bold">Welcome</h1>
-              <p className="text-muted-foreground">user@example.com</p>
+              <p className="text-muted-foreground">Not signed in</p>
               <Badge variant="secondary" className="mt-2">
-                Level 1
+                Level 0
               </Badge>
             </div>
           </div>
@@ -63,7 +62,7 @@ const Profile = () => {
               </CardHeader>
               <CardContent>
                 <Progress value={0} className="mt-2" />
-                <p className="text-sm text-muted-foreground mt-2">0% to Level 2</p>
+                <p className="text-sm text-muted-foreground mt-2">0% to Level 1</p>
               </CardContent>
             </Card>
           </div>

@@ -31,43 +31,13 @@ interface Transaction {
 export const WalletDashboard = () => {
   const [timeFilter, setTimeFilter] = useState<"7" | "30" | "all">("30");
   
-  // Mock data - in a real app, this would come from your backend
   const balance = {
-    total: 150.50,
-    pending: 35.00,
-    confirmed: 115.50
+    total: 0,
+    pending: 0,
+    confirmed: 0
   };
 
-  const transactions: Transaction[] = [
-    {
-      id: "1",
-      date: "2024-02-20",
-      type: "referral",
-      amount: 25.00,
-      status: "confirmed"
-    },
-    {
-      id: "2",
-      date: "2024-02-19",
-      type: "bonus",
-      amount: 10.00,
-      status: "confirmed"
-    },
-    {
-      id: "3",
-      date: "2024-02-18",
-      type: "withdrawal",
-      amount: -50.00,
-      status: "completed"
-    },
-    {
-      id: "4",
-      date: "2024-02-17",
-      type: "referral",
-      amount: 35.00,
-      status: "pending"
-    }
-  ];
+  const transactions: Transaction[] = [];
 
   const handleWithdraw = (method: string) => {
     if (balance.confirmed < 50) {
