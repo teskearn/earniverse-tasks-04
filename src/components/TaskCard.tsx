@@ -1,42 +1,11 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { 
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { DollarSign, Clock, Star, Lock, AlertCircle, Instagram, Twitter, Send, BookOpen, Video } from "lucide-react";
-import { 
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { toast } from "@/components/ui/use-toast";
-import { useState, useEffect } from "react";
-import { Progress } from "@/components/ui/progress";
-
-interface TaskCardProps {
-  title: string;
-  reward: string;
-  timeEstimate: string;
-  isPremium?: boolean;
-  isLocked?: boolean;
-  difficulty?: "easy" | "medium" | "hard";
-  description?: string;
-  limit?: string;
-  category: "free" | "premium" | "milestone";
-  socialLinks?: {
-    instagram?: string[];
-    twitter?: string[];
-    telegram?: string[];
-  };
-  articleLinks?: string[];
-  videoLinks?: string[];
-}
+import { DollarSign, Clock, AlertCircle, Lock, Star } from "lucide-react";
+import { VideoTask } from "./tasks/VideoTask";
+import { SocialTask } from "./tasks/SocialTask";
+import { ArticleTask } from "./tasks/ArticleTask";
+import { TaskBadges } from "./tasks/TaskBadges";
+import { TaskType } from "@/utils/taskData";
 
 export const TaskCard = ({ 
   title, 
@@ -44,131 +13,25 @@ export const TaskCard = ({
   timeEstimate, 
   isPremium = false,
   isLocked = false,
-  difficulty = "easy",
   description,
   limit,
   category,
   socialLinks,
   articleLinks,
   videoLinks
-}: TaskCardProps) => {
-  const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0);
-  const [isWatching, setIsWatching] = useState(false);
-  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes in seconds
-  const [taskCompleted, setTaskCompleted] = useState(false);
-  const [dialogOpen, setDialogOpen] = useState(false);
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout;
-    if (isWatching && timeLeft > 0 && !taskCompleted) {
-      timer = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timer);
-            handleTaskCompletion();
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => {
-      if (timer) clearInterval(timer);
-    };
-  }, [isWatching, timeLeft]);
-
-  const handleTaskCompletion = () => {
-    setTaskCompleted(true);
-    toast({
-      title: "Task Completed!",
-      description: `You've earned ${reward} for completing this task!`,
-    });
-  };
-
-  const handleSocialClick = (platform: string, url: string) => {
-    window.open(url, '_blank');
-    toast({
-      title: "Link opened",
-      description: `Following ${platform} account will help you earn rewards!`,
-    });
-  };
-
-  const handleArticleClick = (url: string) => {
-    window.open(url, '_blank');
-    toast({
-      title: "Article opened",
-      description: "Reading and engaging with the article will help you earn rewards!",
-    });
-  };
-
-  const handleVideoWatch = () => {
-    if (!isWatching) {
-      setIsWatching(true);
-      toast({
-        title: "Video started",
-        description: "Watch for 3 minutes to earn rewards!",
-      });
-    }
-  };
-
-  const getRandomVideoIndex = (currentIndex: number, totalVideos: number) => {
-    if (totalVideos <= 1) return 0;
-    let newIndex;
-    do {
-      newIndex = Math.floor(Math.random() * totalVideos);
-    } while (newIndex === currentIndex);
-    return newIndex;
-  };
-
-  const handleVideoEnd = () => {
-    if (videoLinks && !taskCompleted) {
-      const newIndex = getRandomVideoIndex(currentVideoIndex, videoLinks.length);
-      setCurrentVideoIndex(newIndex);
-      handleVideoWatch();
-    }
-  };
-
-  const formatTime = (seconds: number) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
-  // ... keep existing code (card header and basic content structure)
-
+}: TaskType) => {
   return (
     <Card className="w-full transition-all hover:shadow-lg">
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-base sm:text-lg font-bold line-clamp-1">{title}</CardTitle>
-        <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-          {category === "milestone" && (
-            <Badge variant="secondary" className="bg-purple-100 text-purple-800 text-xs">
-              Milestone
-            </Badge>
-          )}
-          {category === "premium" && (
-            <Badge className="bg-secondary text-secondary-foreground text-xs">
-              <Star className="mr-1 h-3 w-3" /> Premium
-            </Badge>
-          )}
-          {isLocked && (
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Badge variant="outline" className="text-yellow-600 text-xs">
-                    <Lock className="mr-1 h-3 w-3" /> Locked
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent>
-                  Complete 50 free tasks to unlock
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-          )}
-        </div>
+        <CardTitle className="text-base sm:text-lg font-bold line-clamp-1">
+          {title}
+        </CardTitle>
+        <TaskBadges category={category} isLocked={isLocked} />
       </CardHeader>
       <CardContent>
-        <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">{description}</p>
+        <p className="text-xs sm:text-sm text-muted-foreground mb-3 sm:mb-4 line-clamp-2">
+          {description}
+        </p>
         <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-muted-foreground mb-3">
           <div className="flex items-center">
             <DollarSign className="mr-1 h-3 sm:h-4 w-3 sm:w-4" />
@@ -185,148 +48,13 @@ export const TaskCard = ({
             </div>
           )}
         </div>
+        
         {videoLinks ? (
-          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-            <DialogTrigger asChild>
-              <Button 
-                className="w-full text-xs sm:text-sm" 
-                size="sm"
-                disabled={taskCompleted}
-              >
-                <Video className="mr-2 h-4 w-4" />
-                {taskCompleted ? "Task Completed" : "Watch Videos"}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Watch Video to Earn Rewards</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 p-4">
-                {isWatching && !taskCompleted && (
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span>Time Remaining:</span>
-                      <span>{formatTime(timeLeft)}</span>
-                    </div>
-                    <Progress value={(180 - timeLeft) / 180 * 100} />
-                  </div>
-                )}
-                <div className="grid grid-cols-1 gap-4">
-                  <div className="aspect-video w-full">
-                    <iframe
-                      width="100%"
-                      height="100%"
-                      src={`${videoLinks[currentVideoIndex]}&autoplay=1`}
-                      title={`Video ${currentVideoIndex + 1}`}
-                      frameBorder="0"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                      className="rounded-lg"
-                      onEnded={handleVideoEnd}
-                      onPlay={handleVideoWatch}
-                    />
-                  </div>
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <VideoTask videoLinks={videoLinks} reward={reward} />
         ) : socialLinks ? (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full text-xs sm:text-sm" size="sm">
-                View Social Media Links
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Social Media Links</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 p-4">
-                {socialLinks.instagram && socialLinks.instagram.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Instagram</h4>
-                    <div className="grid grid-cols-1 gap-2">
-                      {socialLinks.instagram.map((link, index) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          className="w-full justify-start text-xs"
-                          onClick={() => handleSocialClick('Instagram', link)}
-                        >
-                          <Instagram className="mr-2 h-4 w-4" />
-                          Follow Account {index + 1}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {socialLinks.twitter && socialLinks.twitter.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Twitter</h4>
-                    <div className="grid grid-cols-1 gap-2">
-                      {socialLinks.twitter.map((link, index) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          className="w-full justify-start text-xs"
-                          onClick={() => handleSocialClick('Twitter', link)}
-                        >
-                          <Twitter className="mr-2 h-4 w-4" />
-                          Follow Account {index + 1}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-                {socialLinks.telegram && socialLinks.telegram.length > 0 && (
-                  <div className="space-y-2">
-                    <h4 className="font-medium text-sm">Telegram</h4>
-                    <div className="grid grid-cols-1 gap-2">
-                      {socialLinks.telegram.map((link, index) => (
-                        <Button
-                          key={index}
-                          variant="outline"
-                          className="w-full justify-start text-xs"
-                          onClick={() => handleSocialClick('Telegram', link)}
-                        >
-                          <Send className="mr-2 h-4 w-4" />
-                          Join Channel {index + 1}
-                        </Button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
-            </DialogContent>
-          </Dialog>
+          <SocialTask socialLinks={socialLinks} />
         ) : articleLinks ? (
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button className="w-full text-xs sm:text-sm" size="sm">
-                View Articles
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-md max-h-[80vh] overflow-y-auto">
-              <DialogHeader>
-                <DialogTitle>Available Articles</DialogTitle>
-              </DialogHeader>
-              <div className="space-y-4 p-4">
-                <div className="grid grid-cols-1 gap-2">
-                  {articleLinks.map((link, index) => (
-                    <Button
-                      key={index}
-                      variant="outline"
-                      className="w-full justify-start text-xs"
-                      onClick={() => handleArticleClick(link)}
-                    >
-                      <BookOpen className="mr-2 h-4 w-4" />
-                      Read Article {index + 1}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-            </DialogContent>
-          </Dialog>
+          <ArticleTask articleLinks={articleLinks} />
         ) : (
           <Button 
             className="w-full text-xs sm:text-sm" 
