@@ -16,6 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
 interface TaskCardProps {
   title: string;
@@ -50,6 +51,8 @@ export const TaskCard = ({
   articleLinks,
   videoLinks
 }: TaskCardProps) => {
+  const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0);
+
   const handleSocialClick = (platform: string, url: string) => {
     window.open(url, '_blank');
     toast({
@@ -71,6 +74,23 @@ export const TaskCard = ({
       title: "Video started",
       description: "Watch the complete video to earn rewards!",
     });
+  };
+
+  const getRandomVideoIndex = (currentIndex: number, totalVideos: number) => {
+    if (totalVideos <= 1) return 0;
+    let newIndex;
+    do {
+      newIndex = Math.floor(Math.random() * totalVideos);
+    } while (newIndex === currentIndex);
+    return newIndex;
+  };
+
+  const handleVideoEnd = () => {
+    if (videoLinks) {
+      const newIndex = getRandomVideoIndex(currentVideoIndex, videoLinks.length);
+      setCurrentVideoIndex(newIndex);
+      handleVideoWatch();
+    }
   };
 
   return (
@@ -136,20 +156,19 @@ export const TaskCard = ({
               </DialogHeader>
               <div className="space-y-4 p-4">
                 <div className="grid grid-cols-1 gap-4">
-                  {videoLinks.map((link, index) => (
-                    <div key={index} className="aspect-video w-full" onClick={handleVideoWatch}>
-                      <iframe
-                        width="100%"
-                        height="100%"
-                        src={link}
-                        title={`Video ${index + 1}`}
-                        frameBorder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                        allowFullScreen
-                        className="rounded-lg"
-                      />
-                    </div>
-                  ))}
+                  <div className="aspect-video w-full">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src={`${videoLinks[currentVideoIndex]}&autoplay=1`}
+                      title={`Video ${currentVideoIndex + 1}`}
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="rounded-lg"
+                      onEnded={handleVideoEnd}
+                    />
+                  </div>
                 </div>
               </div>
             </DialogContent>
