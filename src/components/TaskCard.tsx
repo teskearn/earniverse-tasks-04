@@ -16,7 +16,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { toast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { Progress } from "@/components/ui/progress";
 
 interface TaskCardProps {
   title: string;
@@ -52,6 +53,37 @@ export const TaskCard = ({
   videoLinks
 }: TaskCardProps) => {
   const [currentVideoIndex, setCurrentVideoIndex] = useState<number>(0);
+  const [isWatching, setIsWatching] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(180); // 3 minutes in seconds
+  const [taskCompleted, setTaskCompleted] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isWatching && timeLeft > 0 && !taskCompleted) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            handleTaskCompletion();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [isWatching, timeLeft]);
+
+  const handleTaskCompletion = () => {
+    setTaskCompleted(true);
+    toast({
+      title: "Task Completed!",
+      description: `You've earned ${reward} for completing this task!`,
+    });
+  };
 
   const handleSocialClick = (platform: string, url: string) => {
     window.open(url, '_blank');
@@ -70,10 +102,13 @@ export const TaskCard = ({
   };
 
   const handleVideoWatch = () => {
-    toast({
-      title: "Video started",
-      description: "Watch the complete video to earn rewards!",
-    });
+    if (!isWatching) {
+      setIsWatching(true);
+      toast({
+        title: "Video started",
+        description: "Watch for 3 minutes to earn rewards!",
+      });
+    }
   };
 
   const getRandomVideoIndex = (currentIndex: number, totalVideos: number) => {
@@ -86,12 +121,20 @@ export const TaskCard = ({
   };
 
   const handleVideoEnd = () => {
-    if (videoLinks) {
+    if (videoLinks && !taskCompleted) {
       const newIndex = getRandomVideoIndex(currentVideoIndex, videoLinks.length);
       setCurrentVideoIndex(newIndex);
       handleVideoWatch();
     }
   };
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  // ... keep existing code (card header and basic content structure)
 
   return (
     <Card className="w-full transition-all hover:shadow-lg">
@@ -143,18 +186,31 @@ export const TaskCard = ({
           )}
         </div>
         {videoLinks ? (
-          <Dialog>
+          <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
             <DialogTrigger asChild>
-              <Button className="w-full text-xs sm:text-sm" size="sm">
+              <Button 
+                className="w-full text-xs sm:text-sm" 
+                size="sm"
+                disabled={taskCompleted}
+              >
                 <Video className="mr-2 h-4 w-4" />
-                Watch Videos
+                {taskCompleted ? "Task Completed" : "Watch Videos"}
               </Button>
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Available Videos</DialogTitle>
+                <DialogTitle>Watch Video to Earn Rewards</DialogTitle>
               </DialogHeader>
               <div className="space-y-4 p-4">
+                {isWatching && !taskCompleted && (
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Time Remaining:</span>
+                      <span>{formatTime(timeLeft)}</span>
+                    </div>
+                    <Progress value={(180 - timeLeft) / 180 * 100} />
+                  </div>
+                )}
                 <div className="grid grid-cols-1 gap-4">
                   <div className="aspect-video w-full">
                     <iframe
@@ -167,6 +223,7 @@ export const TaskCard = ({
                       allowFullScreen
                       className="rounded-lg"
                       onEnded={handleVideoEnd}
+                      onPlay={handleVideoWatch}
                     />
                   </div>
                 </div>
