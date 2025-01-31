@@ -1,22 +1,22 @@
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { Menu, X, LogIn, LogOut } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 export const Navigation = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { toast } = useToast();
+  const { user, signOut, signInWithGoogle } = useAuth();
 
   const isActive = (path: string) => location.pathname === path;
 
   const handleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: 'google',
-    });
+    const { error } = await signInWithGoogle();
     
     if (error) {
       toast({
@@ -28,7 +28,7 @@ export const Navigation = () => {
   };
 
   const handleSignOut = async () => {
-    const { error } = await supabase.auth.signOut();
+    const { error } = await signOut();
     
     if (error) {
       toast({
@@ -40,6 +40,7 @@ export const Navigation = () => {
       toast({
         title: "Signed out successfully",
       });
+      navigate("/auth");
     }
   };
 
@@ -66,67 +67,74 @@ export const Navigation = () => {
 
           {/* Desktop navigation */}
           <div className="hidden md:flex items-center space-x-4">
-            <Link
-              to="/"
-              className={cn(
-                "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                isActive("/")
-                  ? "bg-primary-foreground text-primary"
-                  : "hover:bg-primary-foreground/10"
-              )}
-            >
-              Home
-            </Link>
-            <Link
-              to="/earn"
-              className={cn(
-                "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                isActive("/earn")
-                  ? "bg-primary-foreground text-primary"
-                  : "hover:bg-primary-foreground/10"
-              )}
-            >
-              Earn
-            </Link>
-            <Link
-              to="/refer"
-              className={cn(
-                "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                isActive("/refer")
-                  ? "bg-primary-foreground text-primary"
-                  : "hover:bg-primary-foreground/10"
-              )}
-            >
-              Refer
-            </Link>
-            <Link
-              to="/profile"
-              className={cn(
-                "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                isActive("/profile")
-                  ? "bg-primary-foreground text-primary"
-                  : "hover:bg-primary-foreground/10"
-              )}
-            >
-              Profile
-            </Link>
-            <Button
-              variant="outline"
-              size="sm"
-              className="ml-4"
-              onClick={handleSignIn}
-            >
-              <LogIn className="mr-2 h-4 w-4" />
-              Sign In
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleSignOut}
-            >
-              <LogOut className="mr-2 h-4 w-4" />
-              Sign Out
-            </Button>
+            {user && (
+              <>
+                <Link
+                  to="/"
+                  className={cn(
+                    "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    isActive("/")
+                      ? "bg-primary-foreground text-primary"
+                      : "hover:bg-primary-foreground/10"
+                  )}
+                >
+                  Home
+                </Link>
+                <Link
+                  to="/earn"
+                  className={cn(
+                    "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    isActive("/earn")
+                      ? "bg-primary-foreground text-primary"
+                      : "hover:bg-primary-foreground/10"
+                  )}
+                >
+                  Earn
+                </Link>
+                <Link
+                  to="/refer"
+                  className={cn(
+                    "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    isActive("/refer")
+                      ? "bg-primary-foreground text-primary"
+                      : "hover:bg-primary-foreground/10"
+                  )}
+                >
+                  Refer
+                </Link>
+                <Link
+                  to="/profile"
+                  className={cn(
+                    "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                    isActive("/profile")
+                      ? "bg-primary-foreground text-primary"
+                      : "hover:bg-primary-foreground/10"
+                  )}
+                >
+                  Profile
+                </Link>
+              </>
+            )}
+            {user ? (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleSignOut}
+              >
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign Out
+              </Button>
+            ) : (
+              <Button
+                variant="outline"
+                size="sm"
+                className="ml-4"
+                onClick={handleSignIn}
+              >
+                <LogIn className="mr-2 h-4 w-4" />
+                Sign In
+              </Button>
+            )}
           </div>
         </div>
 
@@ -134,72 +142,79 @@ export const Navigation = () => {
         {isMenuOpen && (
           <div className="md:hidden py-2">
             <div className="flex flex-col space-y-2">
-              <Link
-                to="/"
-                className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                  isActive("/")
-                    ? "bg-primary-foreground text-primary"
-                    : "hover:bg-primary-foreground/10"
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Home
-              </Link>
-              <Link
-                to="/earn"
-                className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                  isActive("/earn")
-                    ? "bg-primary-foreground text-primary"
-                    : "hover:bg-primary-foreground/10"
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Earn
-              </Link>
-              <Link
-                to="/refer"
-                className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                  isActive("/refer")
-                    ? "bg-primary-foreground text-primary"
-                    : "hover:bg-primary-foreground/10"
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Refer
-              </Link>
-              <Link
-                to="/profile"
-                className={cn(
-                  "px-3 py-2 rounded-md text-sm font-medium transition-colors",
-                  isActive("/profile")
-                    ? "bg-primary-foreground text-primary"
-                    : "hover:bg-primary-foreground/10"
-                )}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Profile
-              </Link>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full"
-                onClick={handleSignIn}
-              >
-                <LogIn className="mr-2 h-4 w-4" />
-                Sign In
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                className="w-full"
-                onClick={handleSignOut}
-              >
-                <LogOut className="mr-2 h-4 w-4" />
-                Sign Out
-              </Button>
+              {user && (
+                <>
+                  <Link
+                    to="/"
+                    className={cn(
+                      "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      isActive("/")
+                        ? "bg-primary-foreground text-primary"
+                        : "hover:bg-primary-foreground/10"
+                    )}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Home
+                  </Link>
+                  <Link
+                    to="/earn"
+                    className={cn(
+                      "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      isActive("/earn")
+                        ? "bg-primary-foreground text-primary"
+                        : "hover:bg-primary-foreground/10"
+                    )}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Earn
+                  </Link>
+                  <Link
+                    to="/refer"
+                    className={cn(
+                      "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      isActive("/refer")
+                        ? "bg-primary-foreground text-primary"
+                        : "hover:bg-primary-foreground/10"
+                    )}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Refer
+                  </Link>
+                  <Link
+                    to="/profile"
+                    className={cn(
+                      "px-3 py-2 rounded-md text-sm font-medium transition-colors",
+                      isActive("/profile")
+                        ? "bg-primary-foreground text-primary"
+                        : "hover:bg-primary-foreground/10"
+                    )}
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    Profile
+                  </Link>
+                </>
+              )}
+              {user ? (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={handleSignOut}
+                >
+                  <LogOut className="mr-2 h-4 w-4" />
+                  Sign Out
+                </Button>
+              ) : (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="w-full"
+                  onClick={handleSignIn}
+                >
+                  <LogIn className="mr-2 h-4 w-4" />
+                  Sign In
+                </Button>
+              )}
             </div>
           </div>
         )}
