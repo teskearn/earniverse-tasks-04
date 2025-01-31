@@ -1,12 +1,19 @@
 import { Button } from "@/components/ui/button";
 import { TaskCard } from "@/components/TaskCard";
 import { HowItWorks } from "@/components/HowItWorks";
-import { ArrowRight, Star, CheckCircle, Shield, TrendingUp } from "lucide-react";
+import { ArrowRight, Star, CheckCircle, Shield, TrendingUp, Trophy, Award } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
 import { Footer } from "@/components/Footer";
 import { Navigation } from "@/components/Navigation";
 
 const Index = () => {
+  // Mock leaderboard data - in a real app this would come from your backend
+  const leaderboardData = [
+    { username: "Sarah J.", earnings: 250, tasks: 45 },
+    { username: "Mike D.", earnings: 200, tasks: 38 },
+    { username: "Alex R.", earnings: 180, tasks: 35 },
+  ];
+
   return (
     <div className="min-h-screen flex flex-col">
       <Navigation />
@@ -66,10 +73,10 @@ const Index = () => {
         <HowItWorks />
 
         {/* Tasks Preview Section */}
-      <section className="py-16 container">
-        <h2 className="text-3xl font-bold text-center mb-12">Available Tasks</h2>
-        
-        {/* Example Progress */}
+        <section className="py-16 container">
+          <h2 className="text-3xl font-bold text-center mb-12">Available Tasks</h2>
+          
+          {/* Example Progress */}
         <div className="max-w-md mx-auto mb-12">
           <div className="flex justify-between text-sm text-muted-foreground mb-2">
             <span>Current Balance: $15</span>
@@ -81,7 +88,7 @@ const Index = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <TaskCard
             title="Quick Survey"
             reward="$0.50"
@@ -132,8 +139,45 @@ const Index = () => {
             category="free"
             description="Review website content"
           />
-        </div>
-      </section>
+          </div>
+        </section>
+
+        {/* Leaderboard Section */}
+        <section className="py-12 bg-muted">
+          <div className="container">
+            <div className="flex items-center justify-center gap-2 mb-8">
+              <Trophy className="h-8 w-8 text-yellow-500" />
+              <h2 className="text-3xl font-bold text-center">Top Earners</h2>
+            </div>
+            
+            <div className="max-w-2xl mx-auto">
+              {leaderboardData.map((user, index) => (
+                <div
+                  key={user.username}
+                  className="flex items-center justify-between p-4 bg-card rounded-lg mb-4 animate-fade-in hover:shadow-md transition-shadow"
+                >
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10">
+                      {index === 0 ? (
+                        <Trophy className="h-5 w-5 text-yellow-500" />
+                      ) : (
+                        <Award className="h-5 w-5 text-primary" />
+                      )}
+                    </div>
+                    <div>
+                      <p className="font-semibold">{user.username}</p>
+                      <p className="text-sm text-muted-foreground">{user.tasks} tasks completed</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <p className="font-bold">${user.earnings}</p>
+                    <p className="text-sm text-muted-foreground">earned</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
 
         {/* Testimonials Section */}
       <section className="bg-muted py-16">
