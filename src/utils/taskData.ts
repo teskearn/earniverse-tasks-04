@@ -13,6 +13,7 @@ export type TaskType = {
     telegram?: string[];
   };
   articleLinks?: string[];
+  videoLinks?: string[];
 };
 
 export const freeTasks: TaskType[] = [
@@ -22,7 +23,18 @@ export const freeTasks: TaskType[] = [
     reward: "$0.05",
     timeEstimate: "2-3 mins",
     limit: "10 videos/day",
-    category: "free"
+    category: "free",
+    videoLinks: [
+      "https://www.youtube.com/embed/zO0OTS9zsXw?si=ZJgt9E7dhRN2Qwdg&controls=0",
+      "https://www.youtube.com/embed/oA8RerStMw4?si=3b0DzH5hfXR-eoBM&controls=0",
+      "https://www.youtube.com/embed/eynxyoKgpng?si=xR-XVsDNIySenQhF&controls=0",
+      "https://www.youtube.com/embed/2iSQyUODfsA?si=GzwoEsH8YsDjqKl-&controls=0",
+      "https://www.youtube.com/embed/UwKTFpQzcsI?si=ldQNCrjlANpM4byB&controls=0",
+      "https://www.youtube.com/embed/BFfF_Lnk9T4?si=LEOtOBpYB8hOEWCJ&controls=0",
+      "https://www.youtube.com/embed/lHlNZD_D2OM?si=aOL1MNS6v7ZziJha&controls=0",
+      "https://www.youtube.com/embed/X0PI1P9p2O8?si=lM3Y-tocbklw_5QT&controls=0",
+      "https://www.youtube.com/embed/21p17gYD7Do?si=Qg7m0vc8szMpF63T&controls=0"
+    ]
   },
   {
     title: "Quick Surveys",

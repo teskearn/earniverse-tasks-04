@@ -8,7 +8,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { DollarSign, Clock, Star, Lock, AlertCircle, Instagram, Twitter, Send, BookOpen } from "lucide-react";
+import { DollarSign, Clock, Star, Lock, AlertCircle, Instagram, Twitter, Send, BookOpen, Video } from "lucide-react";
 import { 
   Tooltip,
   TooltipContent,
@@ -33,6 +33,7 @@ interface TaskCardProps {
     telegram?: string[];
   };
   articleLinks?: string[];
+  videoLinks?: string[];
 }
 
 export const TaskCard = ({ 
@@ -46,7 +47,8 @@ export const TaskCard = ({
   limit,
   category,
   socialLinks,
-  articleLinks
+  articleLinks,
+  videoLinks
 }: TaskCardProps) => {
   const handleSocialClick = (platform: string, url: string) => {
     window.open(url, '_blank');
@@ -61,6 +63,13 @@ export const TaskCard = ({
     toast({
       title: "Article opened",
       description: "Reading and engaging with the article will help you earn rewards!",
+    });
+  };
+
+  const handleVideoWatch = () => {
+    toast({
+      title: "Video started",
+      description: "Watch the complete video to earn rewards!",
     });
   };
 
@@ -113,7 +122,39 @@ export const TaskCard = ({
             </div>
           )}
         </div>
-        {socialLinks ? (
+        {videoLinks ? (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button className="w-full text-xs sm:text-sm" size="sm">
+                <Video className="mr-2 h-4 w-4" />
+                Watch Videos
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
+              <DialogHeader>
+                <DialogTitle>Available Videos</DialogTitle>
+              </DialogHeader>
+              <div className="space-y-4 p-4">
+                <div className="grid grid-cols-1 gap-4">
+                  {videoLinks.map((link, index) => (
+                    <div key={index} className="aspect-video w-full" onClick={handleVideoWatch}>
+                      <iframe
+                        width="100%"
+                        height="100%"
+                        src={link}
+                        title={`Video ${index + 1}`}
+                        frameBorder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                        allowFullScreen
+                        className="rounded-lg"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        ) : socialLinks ? (
           <Dialog>
             <DialogTrigger asChild>
               <Button className="w-full text-xs sm:text-sm" size="sm">
