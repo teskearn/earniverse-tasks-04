@@ -21,20 +21,19 @@ interface ReferralStats {
 }
 
 export const ReferralDashboard = () => {
-  // Mock data - in a real app, this would come from your backend
   const referralStats: ReferralStats = {
-    totalReferrals: 3,
-    activeReferrals: 2,
-    totalEarned: "$15.00",
-    pendingReferrals: 1,
-    availableForWithdrawal: 15.00,
+    totalReferrals: 0,
+    activeReferrals: 0,
+    totalEarned: "$0.00",
+    pendingReferrals: 0,
+    availableForWithdrawal: 0,
     nextMilestone: 5,
   };
 
   const tiers: ReferralTier[] = [
-    { level: 1, required: 5, reward: "$10", current: 3 },
-    { level: 2, required: 10, reward: "$25", current: 3 },
-    { level: 3, required: 20, reward: "Premium Access", current: 3 },
+    { level: 1, required: 5, reward: "$10", current: 0 },
+    { level: 2, required: 10, reward: "$25", current: 0 },
+    { level: 3, required: 20, reward: "Premium Access", current: 0 },
   ];
 
   const withdrawalThreshold = 50;

@@ -3,7 +3,7 @@ import { Button } from "./ui/button";
 import { toast } from "./ui/use-toast";
 
 export const ShareSection = () => {
-  const referralCode = "USER123"; // In a real app, this would come from the user's profile
+  const referralCode = ""; // Will be populated from user's profile
   const referralLink = `https://earniverse.com/signup?ref=${referralCode}`;
 
   const copyToClipboard = () => {
