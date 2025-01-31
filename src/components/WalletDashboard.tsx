@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
-import { Wallet, ArrowUpRight, ArrowDownRight, Bitcoin, CreditCard, Paypal } from "lucide-react";
+import { Wallet, ArrowUpRight, ArrowDownRight, Bitcoin, CreditCard, DollarSign } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -158,7 +158,7 @@ export const WalletDashboard = () => {
               className="flex items-center gap-2"
               onClick={() => handleWithdraw("PayPal")}
             >
-              <Paypal className="h-4 w-4" />
+              <DollarSign className="h-4 w-4" />
               PayPal
             </Button>
           </div>
