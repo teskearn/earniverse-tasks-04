@@ -1,7 +1,8 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Trophy, Users, Star, Gift } from "lucide-react";
+import { Trophy, Users, Star, Gift, DollarSign } from "lucide-react";
+import { ShareSection } from "./ShareSection";
 
 interface ReferralTier {
   level: number;
@@ -10,12 +11,23 @@ interface ReferralTier {
   current: number;
 }
 
+interface ReferralStats {
+  totalReferrals: number;
+  activeReferrals: number;
+  totalEarned: string;
+  pendingReferrals: number;
+  availableForWithdrawal: number;
+  nextMilestone: number;
+}
+
 export const ReferralDashboard = () => {
   // Mock data - in a real app, this would come from your backend
-  const referralStats = {
+  const referralStats: ReferralStats = {
     totalReferrals: 3,
     activeReferrals: 2,
     totalEarned: "$15.00",
+    pendingReferrals: 1,
+    availableForWithdrawal: 15.00,
     nextMilestone: 5,
   };
 
@@ -25,8 +37,14 @@ export const ReferralDashboard = () => {
     { level: 3, required: 20, reward: "Premium Access", current: 3 },
   ];
 
+  const withdrawalThreshold = 50;
+  const progressToWithdrawal = (referralStats.availableForWithdrawal / withdrawalThreshold) * 100;
+
   return (
     <div className="space-y-6">
+      {/* Share Section */}
+      <ShareSection />
+
       {/* Stats Overview */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card>
@@ -36,9 +54,10 @@ export const ReferralDashboard = () => {
           </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">{referralStats.totalReferrals}</div>
-            <p className="text-xs text-muted-foreground">
-              {referralStats.activeReferrals} active referrals
-            </p>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p>{referralStats.activeReferrals} active referrals</p>
+              <p>{referralStats.pendingReferrals} pending</p>
+            </div>
           </CardContent>
         </Card>
         <Card>
@@ -53,12 +72,15 @@ export const ReferralDashboard = () => {
         </Card>
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Next Milestone</CardTitle>
-            <Star className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Available Balance</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{referralStats.nextMilestone} referrals</div>
-            <p className="text-xs text-muted-foreground">To unlock next tier</p>
+          <CardContent className="space-y-2">
+            <div className="text-2xl font-bold">${referralStats.availableForWithdrawal.toFixed(2)}</div>
+            <Progress value={progressToWithdrawal} className="h-2" />
+            <p className="text-xs text-muted-foreground">
+              ${withdrawalThreshold - referralStats.availableForWithdrawal} more until you can withdraw
+            </p>
           </CardContent>
         </Card>
       </div>
