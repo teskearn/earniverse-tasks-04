@@ -18,7 +18,8 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "@/components/ui/use-toast";
-import { Wallet, ArrowUpRight, ArrowDownRight, Bitcoin, CreditCard, DollarSign, Phone } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Wallet, ArrowUpRight, ArrowDownRight, Bitcoin, CreditCard, DollarSign, Phone, Gift } from "lucide-react";
 
 interface Transaction {
   id: string;
@@ -28,13 +29,25 @@ interface Transaction {
   status: "pending" | "confirmed" | "completed";
 }
 
+interface WithdrawalMethod {
+  type: "bank" | "crypto" | "paypal" | "mobile";
+  details: string;
+}
+
 export const WalletDashboard = () => {
   const [timeFilter, setTimeFilter] = useState<"7" | "30" | "all">("30");
+  const [selectedWithdrawalMethod, setSelectedWithdrawalMethod] = useState<WithdrawalMethod | null>(null);
+  const [withdrawalDetails, setWithdrawalDetails] = useState("");
   
   const balance = {
     total: 0,
     pending: 0,
-    confirmed: 0
+    confirmed: 0,
+    incentives: {
+      referralBonus: 0,
+      taskCompletion: 0,
+      dailyStreak: 0
+    }
   };
 
   const transactions: Transaction[] = [];
@@ -48,10 +61,19 @@ export const WalletDashboard = () => {
       });
       return;
     }
+
+    if (!withdrawalDetails) {
+      toast({
+        title: "Withdrawal Failed",
+        description: "Please enter your withdrawal details.",
+        variant: "destructive"
+      });
+      return;
+    }
     
     toast({
       title: "Withdrawal Initiated",
-      description: `Your withdrawal request via ${method} has been initiated.`
+      description: `Your withdrawal request via ${method} has been initiated to ${withdrawalDetails}.`
     });
   };
 
@@ -100,45 +122,104 @@ export const WalletDashboard = () => {
         </Card>
       </div>
 
+      {/* Incentives Section */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Gift className="h-5 w-5" />
+            Incentives & Bonuses
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="p-4 bg-muted rounded-lg">
+              <p className="text-sm font-medium">Referral Bonus</p>
+              <p className="text-lg font-bold">${balance.incentives.referralBonus.toFixed(2)}</p>
+            </div>
+            <div className="p-4 bg-muted rounded-lg">
+              <p className="text-sm font-medium">Task Completion</p>
+              <p className="text-lg font-bold">${balance.incentives.taskCompletion.toFixed(2)}</p>
+            </div>
+            <div className="p-4 bg-muted rounded-lg">
+              <p className="text-sm font-medium">Daily Streak</p>
+              <p className="text-lg font-bold">${balance.incentives.dailyStreak.toFixed(2)}</p>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
       {/* Withdrawal Options */}
       <Card>
         <CardHeader>
           <CardTitle>Withdraw Funds</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex flex-wrap gap-4">
-            <Button
-              variant="outline"
-              className="flex items-center gap-2"
-              onClick={() => handleWithdraw("Bank Transfer")}
-            >
-              <CreditCard className="h-4 w-4" />
-              Bank Transfer
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2"
-              onClick={() => handleWithdraw("Crypto")}
-            >
-              <Bitcoin className="h-4 w-4" />
-              Crypto Wallet
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2"
-              onClick={() => handleWithdraw("PayPal")}
-            >
-              <DollarSign className="h-4 w-4" />
-              PayPal
-            </Button>
-            <Button
-              variant="outline"
-              className="flex items-center gap-2"
-              onClick={() => handleWithdraw("Mobile Money")}
-            >
-              <Phone className="h-4 w-4" />
-              Mobile Money
-            </Button>
+          <div className="space-y-4">
+            <div className="flex flex-wrap gap-4">
+              <Button
+                variant="outline"
+                className={`flex items-center gap-2 ${selectedWithdrawalMethod?.type === 'bank' ? 'ring-2 ring-primary' : ''}`}
+                onClick={() => setSelectedWithdrawalMethod({ type: 'bank', details: '' })}
+              >
+                <CreditCard className="h-4 w-4" />
+                Bank Transfer
+              </Button>
+              <Button
+                variant="outline"
+                className={`flex items-center gap-2 ${selectedWithdrawalMethod?.type === 'crypto' ? 'ring-2 ring-primary' : ''}`}
+                onClick={() => setSelectedWithdrawalMethod({ type: 'crypto', details: '' })}
+              >
+                <Bitcoin className="h-4 w-4" />
+                Crypto Wallet
+              </Button>
+              <Button
+                variant="outline"
+                className={`flex items-center gap-2 ${selectedWithdrawalMethod?.type === 'paypal' ? 'ring-2 ring-primary' : ''}`}
+                onClick={() => setSelectedWithdrawalMethod({ type: 'paypal', details: '' })}
+              >
+                <DollarSign className="h-4 w-4" />
+                PayPal
+              </Button>
+              <Button
+                variant="outline"
+                className={`flex items-center gap-2 ${selectedWithdrawalMethod?.type === 'mobile' ? 'ring-2 ring-primary' : ''}`}
+                onClick={() => setSelectedWithdrawalMethod({ type: 'mobile', details: '' })}
+              >
+                <Phone className="h-4 w-4" />
+                Mobile Money
+              </Button>
+            </div>
+
+            {selectedWithdrawalMethod && (
+              <div className="space-y-4">
+                <Input
+                  placeholder={
+                    selectedWithdrawalMethod.type === 'bank' ? 'Enter bank account details' :
+                    selectedWithdrawalMethod.type === 'crypto' ? 'Enter wallet address' :
+                    selectedWithdrawalMethod.type === 'paypal' ? 'Enter PayPal email' :
+                    'Enter mobile money number'
+                  }
+                  value={withdrawalDetails}
+                  onChange={(e) => setWithdrawalDetails(e.target.value)}
+                />
+                <Button 
+                  className="w-full"
+                  onClick={() => handleWithdraw(
+                    selectedWithdrawalMethod.type === 'bank' ? 'Bank Transfer' :
+                    selectedWithdrawalMethod.type === 'crypto' ? 'Crypto' :
+                    selectedWithdrawalMethod.type === 'paypal' ? 'PayPal' :
+                    'Mobile Money'
+                  )}
+                >
+                  Withdraw to {
+                    selectedWithdrawalMethod.type === 'bank' ? 'Bank Account' :
+                    selectedWithdrawalMethod.type === 'crypto' ? 'Crypto Wallet' :
+                    selectedWithdrawalMethod.type === 'paypal' ? 'PayPal' :
+                    'Mobile Money'
+                  }
+                </Button>
+              </div>
+            )}
           </div>
           <p className="text-sm text-muted-foreground mt-4">
             Minimum withdrawal amount: $50. Withdrawals are processed within 1-3 business days.
