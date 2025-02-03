@@ -9,30 +9,223 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      earnings: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          task_id: string | null
+          type: string
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          task_id?: string | null
+          type: string
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          task_id?: string | null
+          type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "earnings_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
           created_at: string
+          current_streak: number | null
           full_name: string | null
           id: string
+          is_premium: boolean | null
+          last_task_date: string | null
+          pending_earnings: number | null
+          premium_expires_at: string | null
+          tasks_completed: number | null
+          tier: Database["public"]["Enums"]["user_tier"] | null
+          total_earnings: number | null
           updated_at: string
           username: string | null
         }
         Insert: {
           avatar_url?: string | null
           created_at?: string
+          current_streak?: number | null
           full_name?: string | null
           id: string
+          is_premium?: boolean | null
+          last_task_date?: string | null
+          pending_earnings?: number | null
+          premium_expires_at?: string | null
+          tasks_completed?: number | null
+          tier?: Database["public"]["Enums"]["user_tier"] | null
+          total_earnings?: number | null
           updated_at?: string
           username?: string | null
         }
         Update: {
           avatar_url?: string | null
           created_at?: string
+          current_streak?: number | null
           full_name?: string | null
           id?: string
+          is_premium?: boolean | null
+          last_task_date?: string | null
+          pending_earnings?: number | null
+          premium_expires_at?: string | null
+          tasks_completed?: number | null
+          tier?: Database["public"]["Enums"]["user_tier"] | null
+          total_earnings?: number | null
           updated_at?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      tasks: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          is_premium: boolean | null
+          name: string
+          reward: number
+          type: Database["public"]["Enums"]["task_type"]
+          unlock_requirement: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_premium?: boolean | null
+          name: string
+          reward: number
+          type: Database["public"]["Enums"]["task_type"]
+          unlock_requirement?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_premium?: boolean | null
+          name?: string
+          reward?: number
+          type?: Database["public"]["Enums"]["task_type"]
+          unlock_requirement?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      tickets: {
+        Row: {
+          created_at: string
+          id: string
+          message: string
+          resolved_at: string | null
+          status: Database["public"]["Enums"]["ticket_status"] | null
+          subject: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          message: string
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["ticket_status"] | null
+          subject: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          message?: string
+          resolved_at?: string | null
+          status?: Database["public"]["Enums"]["ticket_status"] | null
+          subject?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_tasks: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          status: Database["public"]["Enums"]["task_status"] | null
+          task_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["task_status"] | null
+          task_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          status?: Database["public"]["Enums"]["task_status"] | null
+          task_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_tasks_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      withdrawals: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          payment_details: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          processed_at: string | null
+          status: Database["public"]["Enums"]["withdrawal_status"] | null
+          user_id: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          id?: string
+          payment_details: string
+          payment_method: Database["public"]["Enums"]["payment_method"]
+          processed_at?: string | null
+          status?: Database["public"]["Enums"]["withdrawal_status"] | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          payment_details?: string
+          payment_method?: Database["public"]["Enums"]["payment_method"]
+          processed_at?: string | null
+          status?: Database["public"]["Enums"]["withdrawal_status"] | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -44,7 +237,12 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      payment_method: "bank" | "crypto" | "paypal" | "mobile"
+      task_status: "pending" | "completed" | "failed"
+      task_type: "video" | "survey" | "social" | "article" | "premium"
+      ticket_status: "open" | "in_progress" | "resolved" | "closed"
+      user_tier: "bronze" | "silver" | "gold"
+      withdrawal_status: "pending" | "processing" | "completed" | "failed"
     }
     CompositeTypes: {
       [_ in never]: never
