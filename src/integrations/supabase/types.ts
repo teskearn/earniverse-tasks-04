@@ -55,6 +55,8 @@ export type Database = {
           last_task_date: string | null
           pending_earnings: number | null
           premium_expires_at: string | null
+          referral_code: string | null
+          referred_by: string | null
           tasks_completed: number | null
           tier: Database["public"]["Enums"]["user_tier"] | null
           total_earnings: number | null
@@ -71,6 +73,8 @@ export type Database = {
           last_task_date?: string | null
           pending_earnings?: number | null
           premium_expires_at?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
           tasks_completed?: number | null
           tier?: Database["public"]["Enums"]["user_tier"] | null
           total_earnings?: number | null
@@ -87,11 +91,73 @@ export type Database = {
           last_task_date?: string | null
           pending_earnings?: number | null
           premium_expires_at?: string | null
+          referral_code?: string | null
+          referred_by?: string | null
           tasks_completed?: number | null
           tier?: Database["public"]["Enums"]["user_tier"] | null
           total_earnings?: number | null
           updated_at?: string
           username?: string | null
+        }
+        Relationships: []
+      }
+      referral_milestones: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string
+          id: string
+          required_count: number
+          reward_amount: number
+          user_id: string | null
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          required_count: number
+          reward_amount: number
+          user_id?: string | null
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          required_count?: number
+          reward_amount?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      referrals: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          id: string
+          referred_user_id: string | null
+          referrer_id: string | null
+          reward_amount: number | null
+          status: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          referred_user_id?: string | null
+          referrer_id?: string | null
+          reward_amount?: number | null
+          status?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          referred_user_id?: string | null
+          referrer_id?: string | null
+          reward_amount?: number | null
+          status?: string | null
         }
         Relationships: []
       }
@@ -234,7 +300,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      generate_referral_code: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
     }
     Enums: {
       payment_method: "bank" | "crypto" | "paypal" | "mobile"
