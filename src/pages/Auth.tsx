@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -14,9 +15,24 @@ const Auth = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
 
+  // Password validation function
+  const isPasswordValid = (password: string) => {
+    return password.length >= 6; // Supabase requires minimum 6 characters
+  };
+
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    
+    if (!isPasswordValid(password)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid password",
+        description: "Password must be at least 6 characters long",
+      });
+      setLoading(false);
+      return;
+    }
     
     const { error } = await supabase.auth.signUp({
       email,
@@ -41,6 +57,16 @@ const Auth = () => {
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    
+    if (!isPasswordValid(password)) {
+      toast({
+        variant: "destructive",
+        title: "Invalid password",
+        description: "Password must be at least 6 characters long",
+      });
+      setLoading(false);
+      return;
+    }
     
     const { error } = await supabase.auth.signInWithPassword({
       email,
@@ -102,7 +128,11 @@ const Auth = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              minLength={6}
             />
+            <p className="text-xs text-muted-foreground">
+              Password must be at least 6 characters long
+            </p>
           </div>
           
           <div className="space-y-4">
