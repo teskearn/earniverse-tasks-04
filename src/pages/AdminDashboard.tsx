@@ -16,15 +16,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shield, UserX, UserCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { User } from "@supabase/supabase-js";
 
 type Profile = {
   id: string;
-  email: string;
   role: 'user' | 'admin';
   created_at: string;
   username: string | null;
   full_name: string | null;
+  email: string | null;
 };
 
 const AdminDashboard = () => {
@@ -37,8 +36,13 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     checkAdminStatus();
-    fetchUsers();
   }, []);
+
+  useEffect(() => {
+    if (isAdmin) {
+      fetchUsers();
+    }
+  }, [isAdmin]);
 
   const checkAdminStatus = async () => {
     if (!user) {
@@ -46,13 +50,13 @@ const AdminDashboard = () => {
       return;
     }
 
-    const { data: profile } = await supabase
+    const { data: profile, error } = await supabase
       .from('profiles')
       .select('role')
       .eq('id', user.id)
       .single();
 
-    if (profile?.role !== 'admin') {
+    if (error || profile?.role !== 'admin') {
       navigate('/');
       toast({
         variant: "destructive",
@@ -68,24 +72,12 @@ const AdminDashboard = () => {
     try {
       const { data: profiles, error } = await supabase
         .from('profiles')
-        .select('id, username, full_name, role, created_at')
+        .select('*')
         .order('created_at', { ascending: false });
 
       if (error) throw error;
 
-      // Type assertion for auth users response
-      const { data: authData, error: authError } = await supabase.auth.admin.listUsers();
-      
-      if (authError) throw authError;
-
-      const authUsers = authData?.users as User[] || [];
-
-      const combinedUsers = profiles?.map(profile => ({
-        ...profile,
-        email: authUsers.find(u => u.id === profile.id)?.email || 'N/A'
-      }));
-
-      setUsers(combinedUsers || []);
+      setUsers(profiles || []);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
@@ -126,7 +118,7 @@ const AdminDashboard = () => {
     }
   };
 
-  if (!isAdmin) {
+  if (loading || !isAdmin) {
     return null;
   }
 
@@ -161,7 +153,7 @@ const AdminDashboard = () => {
                       <p className="text-sm text-muted-foreground">{user.username || 'No username'}</p>
                     </div>
                   </TableCell>
-                  <TableCell>{user.email}</TableCell>
+                  <TableCell>{user.email || 'N/A'}</TableCell>
                   <TableCell>
                     <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${
                       user.role === 'admin' ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'
@@ -177,6 +169,7 @@ const AdminDashboard = () => {
                       variant="outline"
                       size="sm"
                       onClick={() => toggleUserRole(user.id, user.role)}
+                      disabled={user.id === user?.id}
                     >
                       {user.role === 'admin' ? (
                         <UserX className="h-4 w-4 mr-1" />
