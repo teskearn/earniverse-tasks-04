@@ -23,11 +23,22 @@ type Profile = {
   created_at: string;
   username: string | null;
   full_name: string | null;
+  avatar_url: string | null;
+  is_premium: boolean | null;
+  tier: string | null;
+  tasks_completed: number | null;
+  current_streak: number | null;
+  total_earnings: number | null;
+  pending_earnings: number | null;
+  referral_code: string | null;
+};
+
+type UserWithEmail = Profile & {
   email: string | null;
 };
 
 const AdminDashboard = () => {
-  const [users, setUsers] = useState<Profile[]>([]);
+  const [users, setUsers] = useState<UserWithEmail[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -70,14 +81,24 @@ const AdminDashboard = () => {
 
   const fetchUsers = async () => {
     try {
-      const { data: profiles, error } = await supabase
+      const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
         .order('created_at', { ascending: false });
 
-      if (error) throw error;
+      if (profilesError) throw profilesError;
 
-      setUsers(profiles || []);
+      // Get emails from auth.users
+      const { data: { users: authUsers }, error: authError } = await supabase.auth.admin.users();
+      
+      if (authError) throw authError;
+
+      const usersWithEmail = profiles?.map(profile => ({
+        ...profile,
+        email: authUsers?.find(authUser => authUser.id === profile.id)?.email || null
+      })) || [];
+
+      setUsers(usersWithEmail);
     } catch (error) {
       console.error('Error fetching users:', error);
       toast({
