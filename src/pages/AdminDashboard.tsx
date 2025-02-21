@@ -16,6 +16,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Shield, UserX, UserCheck } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
+import { User } from "@supabase/supabase-js";
 
 type Profile = {
   id: string;
@@ -72,14 +73,16 @@ const AdminDashboard = () => {
 
       if (error) throw error;
 
-      // Fetch emails from auth.users (this requires admin access)
-      const { data: users, error: authError } = await supabase.auth.admin.listUsers();
+      // Type assertion for auth users response
+      const { data: authData, error: authError } = await supabase.auth.admin.listUsers();
       
       if (authError) throw authError;
 
+      const authUsers = authData?.users as User[] || [];
+
       const combinedUsers = profiles?.map(profile => ({
         ...profile,
-        email: users.users.find(u => u.id === profile.id)?.email || 'N/A'
+        email: authUsers.find(u => u.id === profile.id)?.email || 'N/A'
       }));
 
       setUsers(combinedUsers || []);
