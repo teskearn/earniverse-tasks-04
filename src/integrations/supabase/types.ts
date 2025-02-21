@@ -57,6 +57,7 @@ export type Database = {
           premium_expires_at: string | null
           referral_code: string | null
           referred_by: string | null
+          role: Database["public"]["Enums"]["user_role"]
           tasks_completed: number | null
           tier: Database["public"]["Enums"]["user_tier"] | null
           total_earnings: number | null
@@ -75,6 +76,7 @@ export type Database = {
           premium_expires_at?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
           tasks_completed?: number | null
           tier?: Database["public"]["Enums"]["user_tier"] | null
           total_earnings?: number | null
@@ -93,6 +95,7 @@ export type Database = {
           premium_expires_at?: string | null
           referral_code?: string | null
           referred_by?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
           tasks_completed?: number | null
           tier?: Database["public"]["Enums"]["user_tier"] | null
           total_earnings?: number | null
@@ -310,6 +313,7 @@ export type Database = {
       task_status: "pending" | "completed" | "failed"
       task_type: "video" | "survey" | "social" | "article" | "premium"
       ticket_status: "open" | "in_progress" | "resolved" | "closed"
+      user_role: "user" | "admin"
       user_tier: "bronze" | "silver" | "gold"
       withdrawal_status: "pending" | "processing" | "completed" | "failed"
     }
