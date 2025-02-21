@@ -52,7 +52,7 @@ export const useAdminDashboard = (currentUser: User | null) => {
       const { data: profiles, error: profilesError } = await supabase
         .from('profiles')
         .select('*')
-        .order('created_at', { ascending: false });
+        .returns<Profile[]>();
 
       if (profilesError) throw profilesError;
 
@@ -60,11 +60,10 @@ export const useAdminDashboard = (currentUser: User | null) => {
       
       if (authError) throw authError;
 
-      const typedProfiles = profiles as Profile[] | null;
-      const usersWithEmail = typedProfiles?.map(profile => ({
+      const usersWithEmail = (profiles || []).map(profile => ({
         ...profile,
         email: data?.users?.find(authUser => authUser.id === profile.id)?.email || null
-      })) || [];
+      }));
 
       setUsers(usersWithEmail);
     } catch (error) {
