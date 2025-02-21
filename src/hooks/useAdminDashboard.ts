@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { UserWithEmail } from "@/types/admin";
+import { UserWithEmail, Profile } from "@/types/admin";
 import { User } from "@supabase/supabase-js";
 
 export const useAdminDashboard = (currentUser: User | null) => {
@@ -60,7 +60,8 @@ export const useAdminDashboard = (currentUser: User | null) => {
       
       if (authError) throw authError;
 
-      const usersWithEmail = profiles?.map(profile => ({
+      // Add type assertion for profiles
+      const usersWithEmail = (profiles as Profile[] | null)?.map(profile => ({
         ...profile,
         email: data?.users?.find(authUser => authUser.id === profile.id)?.email || null
       })) || [];
