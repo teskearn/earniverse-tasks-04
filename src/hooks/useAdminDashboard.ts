@@ -60,8 +60,7 @@ export const useAdminDashboard = (currentUser: User | null) => {
       
       if (authError) throw authError;
 
-      // Add type assertion for profiles
-      const usersWithEmail = (profiles as Profile[] | null)?.map(profile => ({
+      const usersWithEmail = profiles?.map((profile: Profile) => ({
         ...profile,
         email: data?.users?.find(authUser => authUser.id === profile.id)?.email || null
       })) || [];
