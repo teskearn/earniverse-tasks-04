@@ -88,14 +88,14 @@ const AdminDashboard = () => {
 
       if (profilesError) throw profilesError;
 
-      // Get emails from auth.users
-      const { data: { users: authUsers }, error: authError } = await supabase.auth.admin.users();
+      // Get emails from auth.users using the correct API method
+      const { data, error: authError } = await supabase.auth.admin.listUsers();
       
       if (authError) throw authError;
 
       const usersWithEmail = profiles?.map(profile => ({
         ...profile,
-        email: authUsers?.find(authUser => authUser.id === profile.id)?.email || null
+        email: data?.users?.find(authUser => authUser.id === profile.id)?.email || null
       })) || [];
 
       setUsers(usersWithEmail);
