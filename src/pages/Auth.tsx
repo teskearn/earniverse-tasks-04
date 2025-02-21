@@ -17,84 +17,129 @@ const Auth = () => {
 
   // Password validation function
   const isPasswordValid = (password: string) => {
-    return password.length >= 6; // Supabase requires minimum 6 characters
+    return password.length >= 6;
   };
 
   const handleEmailSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     
-    if (!isPasswordValid(password)) {
-      toast({
-        variant: "destructive",
-        title: "Invalid password",
-        description: "Password must be at least 6 characters long",
-      });
-      setLoading(false);
-      return;
-    }
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-    });
+    try {
+      setLoading(true);
+      
+      if (!isPasswordValid(password)) {
+        toast({
+          variant: "destructive",
+          title: "Invalid password",
+          description: "Password must be at least 6 characters long",
+        });
+        return;
+      }
 
-    if (error) {
+      console.log("Attempting signup with email:", email);
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: window.location.origin,
+        },
+      });
+
+      if (error) {
+        console.error("Signup error:", error);
+        toast({
+          variant: "destructive",
+          title: "Error signing up",
+          description: error.message,
+        });
+      } else {
+        console.log("Signup successful:", data);
+        toast({
+          title: "Success!",
+          description: "Please check your email to confirm your account.",
+        });
+      }
+    } catch (err) {
+      console.error("Unexpected error during signup:", err);
       toast({
         variant: "destructive",
         title: "Error signing up",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
       });
-    } else {
-      toast({
-        title: "Success!",
-        description: "Please check your email to confirm your account.",
-      });
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleEmailSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
-    setLoading(true);
     
-    if (!isPasswordValid(password)) {
-      toast({
-        variant: "destructive",
-        title: "Invalid password",
-        description: "Password must be at least 6 characters long",
-      });
-      setLoading(false);
-      return;
-    }
-    
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      setLoading(true);
+      
+      if (!isPasswordValid(password)) {
+        toast({
+          variant: "destructive",
+          title: "Invalid password",
+          description: "Password must be at least 6 characters long",
+        });
+        return;
+      }
 
-    if (error) {
+      console.log("Attempting signin with email:", email);
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        console.error("Signin error:", error);
+        toast({
+          variant: "destructive",
+          title: "Error signing in",
+          description: error.message,
+        });
+      } else {
+        console.log("Signin successful:", data);
+        navigate("/");
+      }
+    } catch (err) {
+      console.error("Unexpected error during signin:", err);
       toast({
         variant: "destructive",
         title: "Error signing in",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
       });
-    } else {
-      navigate("/");
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
   const handleGoogleSignIn = async () => {
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-    });
+    try {
+      console.log("Attempting Google signin");
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo: window.location.origin,
+        },
+      });
 
-    if (error) {
+      if (error) {
+        console.error("Google signin error:", error);
+        toast({
+          variant: "destructive",
+          title: "Error signing in with Google",
+          description: error.message,
+        });
+      } else {
+        console.log("Google signin initiated:", data);
+      }
+    } catch (err) {
+      console.error("Unexpected error during Google signin:", err);
       toast({
         variant: "destructive",
         title: "Error signing in with Google",
-        description: error.message,
+        description: "An unexpected error occurred. Please try again.",
       });
     }
   };
