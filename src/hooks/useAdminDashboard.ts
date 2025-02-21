@@ -60,7 +60,8 @@ export const useAdminDashboard = (currentUser: User | null) => {
       
       if (authError) throw authError;
 
-      const usersWithEmail = profiles?.map((profile: Profile) => ({
+      const typedProfiles = profiles as Profile[] | null;
+      const usersWithEmail = typedProfiles?.map(profile => ({
         ...profile,
         email: data?.users?.find(authUser => authUser.id === profile.id)?.email || null
       })) || [];
